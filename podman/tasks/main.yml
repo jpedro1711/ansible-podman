@@ -1,6 +1,16 @@
 #SPDX-License-Identifier: MIT-0
 ---
 # tasks file for podman
+- name: Add repo
+  ansible.builtin.apt_repository:
+    repo: "deb http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release }} universe"
+    state: present
+
+- name: Update cache
+  ansible.builtin.apt:
+    update_cache: yes
+    force_apt_get: yes
+    
 - name: installing podman
   package:
     name: "{{ package_name }}"
