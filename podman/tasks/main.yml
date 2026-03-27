@@ -11,12 +11,6 @@
   containers.podman.podman_image:
     name: "{{ image_package_name }}"
 
-- name: Ensure directory exists
-  ansible.builtin.file:
-    path: /root/ws1
-    state: directory
-    mode: '0755'
-
 - name: Update motd from template
   ansible.builtin.template:
     src: templates/motd.j2
