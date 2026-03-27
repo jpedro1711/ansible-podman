@@ -5,7 +5,6 @@
   package:
     name: "{{ package_name }}"
     state: present
-  when: inventory_hostname in groups['podman']
 
 - name: Pull httpd image
   containers.podman.podman_image:
