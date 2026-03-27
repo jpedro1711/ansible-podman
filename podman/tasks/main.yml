@@ -1,0 +1,46 @@
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for podman
+- name: installing podman
+  package:
+    name: "{{ package_name }}"
+    state: present
+  when: inventory_hostname in groups['podman']
+
+- name: Pull httpd image
+  containers.podman.podman_image:
+    name: "{{ image_package_name }}"
+
+- name: Ensure directory exists
+  ansible.builtin.file:
+    path: /root/ws1
+    state: directory
+    mode: '0755'
+
+- name: Update motd from template
+  ansible.builtin.template:
+    src: templates/motd.j2
+    dest: /home/index.html
+
+- name: Re-create a container
+  containers.podman.podman_container:
+    name: my-container
+    image: httpd
+    state: started
+    detach: true
+    exposed_ports:
+      - 80
+    ports:
+      - 80:80
+    volumes: /home/:/usr/local/apache2/htdocs/:Z
+
+- name: Generate systemd unit file for the container
+  containers.podman.podman_generate_systemd:
+    name: my-container
+    dest: /etc/systemd/system/
+  notify: Reload daemon
+
+- name: Enable systemd service for the container
+  ansible.builtin.systemd:
+    name: container-my-container.service
+    enabled: true

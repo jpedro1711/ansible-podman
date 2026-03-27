@@ -1,0 +1,6 @@
+---
+- name: Deploy podman using role
+  hosts: podman
+  become: true
+  roles:
+    - podman
