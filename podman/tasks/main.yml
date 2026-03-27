@@ -18,7 +18,7 @@
 
 - name: Pull httpd image
   containers.podman.podman_image:
-    name: "{{ image_package_name }}"
+    name: "docker.io/library/httpd:latest""
 
 - name: Update motd from template
   ansible.builtin.template:
